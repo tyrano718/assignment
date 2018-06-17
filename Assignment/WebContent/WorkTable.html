@@ -5,6 +5,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function(){
+		$("#back").hide();
     	$("#confirm").click(function(){
     		var th0 = "<table><tr><th>간호사/날짜</th>";
     		var th1 = "<th>1/1</th>";
@@ -13,8 +14,14 @@
     		var td2 = "<tr><td>간호사2</td><td>E</td><td>E</td></tr></table>";
     		var table = th0+th1+th2+td1+td2;
     		
-    		$("#table").append(table);
+    		$("#table").html(table);
     		$("#confirm").hide();
+    		$("#back").show();
+    	});
+    	$("#back").click(function(){
+    		$("#table").empty();
+    		$("#confirm").show();
+    		$("#back").hide();
     	});
 	});
 </script>
@@ -102,7 +109,10 @@
 				</select>
 			</fieldset>
 		</div>
-		<p><button id="confirm">확인</button></p>
+		<p>
+		<button id="confirm">확인</button>
+		<button id="back">뒤로</button>
+		</p>
 		<div id="table">
 			
 		</div>
