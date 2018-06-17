@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+    	$("#confirm").click(function(){
+    		var th0 = "<table><tr><th>간호사/날짜</th>";
+    		var th1 = "<th>1/1</th>";
+    		var th2 = "<th>1/2</th></tr>";
+    		var td1 = "<tr><td>간호사1</td><td>E</td><td>E</td></tr>";
+    		var td2 = "<tr><td>간호사2</td><td>E</td><td>E</td></tr></table>";
+    		var table = th0+th1+th2+td1+td2;
+    		
+    		$("#table").append(table);
+    		$("#confirm").hide();
+    	});
+	});
+</script>
+<style type="text/css">
+	table, th, td {
+    	border: 1px solid black;
+    	border-collapse: collapse;
+	}
+</style>
+<title>간호사 근무표</title>
+</head>
+<body>
+	<div id="workTable">
+		<h1>간호사 근무표</h1>
+		<div id="period">
+			<fieldset>
+				<legend><strong>근무기간 입력</strong></legend>
+				<select>
+					<option value="1">1월</option>
+					<option value="2">2월</option>
+					<option value="3">3월</option>
+					<option value="4">4월</option>
+					<option value="5">5월</option>
+					<option value="6">6월</option>
+					<option value="7">7월</option>
+					<option value="8">8월</option>
+					<option value="9">9월</option>
+					<option value="10">10월</option>
+					<option value="11">11월</option>
+					<option value="12">12월</option>
+				</select>
+				부터<br/>
+				<select>
+					<option value="1">1월</option>
+					<option value="2">2월</option>
+					<option value="3">3월</option>
+					<option value="4">4월</option>
+					<option value="5">5월</option>
+					<option value="6">6월</option>
+					<option value="7">7월</option>
+					<option value="8">8월</option>
+					<option value="9">9월</option>
+					<option value="10">10월</option>
+					<option value="11">11월</option>
+					<option value="12">12월</option>
+				</select>
+				까지
+			</fieldset>
+		</div>
+		<br/>
+		<div id="nurses">
+			<fieldset>
+				<legend><strong>간호사 수 입력</strong></legend>
+				수간호사 : 
+				<select id="chief">
+					<option value="2">2명</option>
+					<option value="3">3명</option>
+					<option value="4">4명</option>
+					<option value="5">5명</option>
+					<option value="6">6명</option>
+					<option value="7">7명</option>
+					<option value="8">8명</option>
+					<option value="9">9명</option>
+					<option value="10">10명</option>
+				</select><br/>
+				일반 간호사 : 
+				<select id="regular">
+					<option value="4">4명</option>
+					<option value="5">5명</option>
+					<option value="6">6명</option>
+					<option value="7">7명</option>
+					<option value="8">8명</option>
+					<option value="9">9명</option>
+					<option value="10">10명</option>
+				</select><br/>
+				간호 조무사 : 
+				<select id="helper">
+					<option value="4">4명</option>
+					<option value="5">5명</option>
+					<option value="6">6명</option>
+					<option value="7">7명</option>
+					<option value="8">8명</option>
+					<option value="9">9명</option>
+					<option value="10">10명</option>
+				</select>
+			</fieldset>
+		</div>
+		<p><button id="confirm">확인</button></p>
+		<div id="table">
+			
+		</div>
+	</div>
+</body>
+</html>
