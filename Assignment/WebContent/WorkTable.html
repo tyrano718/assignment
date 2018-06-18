@@ -111,7 +111,7 @@
     		function nurseRow(index, endDate){
     			var nurseR = '';
         		for(var i = 0; i < chiefN; i++){
-        			nurseR += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td>';
+        			nurseR += '<tr><td><font color="purple"><strong>수간호사'+(i+1)+'</strong></font></td>';
         			for(var j = index; j < endDate+index; j++){
         				nurseR += '<td style="text-align:center;">'+chiefArr[i][j]+'</td>';
         			}
@@ -125,7 +125,7 @@
         			nurseR += '</tr>';
         		}
         		for(var i = 0; i < helperN; i++){
-        			nurseR += '<tr><td><font color="green"><strong>간호 조무사'+(i+1)+'</strong></font></td>';
+        			nurseR += '<tr><td><font color="brown"><strong>간호 조무사'+(i+1)+'</strong></font></td>';
         			for(var j = index; j < endDate+index; j++){
         				nurseR += '<td style="text-align:center;">'+helperArr[i][j]+'</td>';
         			}
