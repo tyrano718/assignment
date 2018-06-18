@@ -24,6 +24,7 @@
     		}
     		
     		<!-- 선택한 기간과 간호사 수의 값을 불러옴 -->
+    		<!-- 각 기간의 시작 월과 마지막 월 -->
     		var monthS = Number($("#period #start").val());
     		var monthE = Number($("#period #end").val());
     		
@@ -35,14 +36,40 @@
     			return;
     		}
     		
+    		<!-- 간호사의 수 -->
     		var chiefN = Number($("#nurses #chief").val());
     		var regularN = Number($("#nurses #regular").val());
     		var helperN = Number($("#nurses #helper").val());
     		
-    		<!-- 간호사 생성 -->
+    		<!-- 간호사 배열 생성 -->
+    		var chiefArr = new Array(chiefN);
+    		var regularArr = new Array(regularN);
+    		var helperArr = new Array(helperN);
+    		
+    		var endDateSum = 0;
+    		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
+    			endDateSum += endDate(j+1);
+    		}
+    		
+    		for(var i = 0; i < chiefArr.length; i++) chiefArr[i] = new Array(endDateSum);
+    		for(var i = 0; i < regularArr.length; i++) regularArr[i] = new Array(endDateSum);
+    		for(var i = 0; i < helperArr.length; i++) helperArr[i] = new Array(endDateSum);
+    		
+    		<!-- 간호사 근무 배정 -->
+    		for(var i=0; i < chiefArr.length; i++){
+    			for(var j = 0; j < chiefArr[i].length; j++){
+    				chiefArr[i][j] = 'D';
+    			}
+    		}
+    		
+    		<!-- 간호사열 생성 -->
     		var nurseR = '';
     		for(var i = 0; i < chiefN; i++){
-    			nurseR += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td></tr>';
+    			nurseR += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td>';
+    			for(var j = 0; j < chiefArr[i].length; j++){
+    				nurseR += '<td style="text-align:center;">'+chiefArr[i][j]+'</td>';
+    			}
+    			nurseR += '</tr>';
     		}
     		for(var i = 0; i < regularN; i++){
     			nurseR += '<tr><td><font color="purple"><strong>일반 간호사'+(i+1)+'</strong></font></td></tr>';
