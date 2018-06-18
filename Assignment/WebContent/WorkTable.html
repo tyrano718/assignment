@@ -8,6 +8,21 @@
 		$("#back").hide();
 		
     	$("#confirm").click(function(){
+    		<!-- 각달의 마지막 날짜를 구하는 함수 -->
+    		function endDate(month){
+    			switch(i+1){
+					case 1:
+					case 3:
+					case 5:
+					case 7:
+					case 8:
+					case 10:
+					case 12: return 31;
+					case 2: return 28;
+					default: return 30;
+				}
+    		}
+    		
     		<!-- 선택한 기간과 간호사 수의 값을 불러옴 -->
     		var monthS = Number($("#period #start").val());
     		var monthE = Number($("#period #end").val());
@@ -25,35 +40,26 @@
     		var helperN = Number($("#nurses #helper").val());
     		
     		<!-- 간호사 생성 -->
-    		var tr = '';
+    		var nurseR = '';
     		for(var i = 0; i < chiefN; i++){
-    			tr += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td></tr>';
+    			nurseR += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td></tr>';
     		}
     		for(var i = 0; i < regularN; i++){
-    			tr += '<tr><td><font color="purple"><strong>일반 간호사'+(i+1)+'</strong></font></td></tr>';
+    			nurseR += '<tr><td><font color="purple"><strong>일반 간호사'+(i+1)+'</strong></font></td></tr>';
     		}
     		for(var i = 0; i < helperN; i++){
-    			tr += '<tr><td><font color="brown"><strong>간호 조무사'+(i+1)+'</strong></font></td></tr>';
+    			nurseR += '<tr><td><font color="brown"><strong>간호 조무사'+(i+1)+'</strong></font></td></tr>';
     		}
     		
     		<!-- 테이블 생성 -->
-    		var table='<table><tr><th>간호사/날짜</th>';
-    		var i = 0;
-    		var recentMonth = monthS.getMonth();
-    		while(monthS.getMonth() <= monthE.getMonth()){
-    			monthS.setDate(++i);
-    			if(monthS.getMonth() == recentMonth)
-    				table += '<th>'+(monthS.getMonth()+1)+'/'+monthS.getDate()+'</th>';
-    			else {
-    				recentMonth = monthS.getMonth();
-    				i = 0;
-    				if(recentMonth <= monthE.getMonth())
-    					table += '</tr>'+tr+'</table><br/><br/><table><tr><th>간호사/날짜</th>';
-    				else
-    					break;
+    		var table='';
+    		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
+    			table += '<table><tr><th>간호사/날짜</th>';
+    			for(var j = 1; j <= endDate(i+1); j++){
+    				table += '<th>'+(i+1)+'/'+j+'</th>';
     			}
+    			table += '</tr>' + nurseR + '</table><br/><br/>';
     		}
-    		table += '</tr>'+tr+'</table>';
     		
     		$("#table").html(table);
     		$("#confirm").hide();
