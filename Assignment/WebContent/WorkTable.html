@@ -10,7 +10,7 @@
     	$("#confirm").click(function(){
     		<!-- 각달의 마지막 날짜를 구하는 함수 -->
     		function endDate(month){
-    			switch(i+1){
+    			switch(month){
 					case 1:
 					case 3:
 					case 5:
@@ -45,10 +45,10 @@
     		var chiefArr = new Array(chiefN);
     		var regularArr = new Array(regularN);
     		var helperArr = new Array(helperN);
-    		
+    		<!-- 간호사의 근무기간 구하기 -->
     		var endDateSum = 0;
     		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
-    			endDateSum += endDate(j+1);
+    			endDateSum += endDate(i+1);
     		}
     		
     		for(var i = 0; i < chiefArr.length; i++) chiefArr[i] = new Array(endDateSum);
@@ -56,34 +56,93 @@
     		for(var i = 0; i < helperArr.length; i++) helperArr[i] = new Array(endDateSum);
     		
     		<!-- 간호사 근무 배정 -->
+    		<!-- 수간호사 -->
     		for(var i=0; i < chiefArr.length; i++){
     			for(var j = 0; j < chiefArr[i].length; j++){
     				chiefArr[i][j] = 'D';
     			}
     		}
+    		<!-- 일반 간호사 -->
+    		for(var i=0; i < regularArr.length; i++){
+    			if(i%3 == 0){
+    				for(var j = 0; j < regularArr[i].length; j++){
+    					if(Math.floor(j/7)%3 == 0) regularArr[i][j] = 'E';
+    					else if(Math.floor(j/7)%3 == 1) regularArr[i][j] = 'N';
+    					else regularArr[i][j] = 'D';
+    				}
+    			} else if(i%3 == 1){
+    				for(var j = 0; j < regularArr[i].length; j++){
+    					if(Math.floor(j/7)%3 == 0) regularArr[i][j] = 'D';
+    					else if(Math.floor(j/7)%3 == 1) regularArr[i][j] = 'E';
+    					else regularArr[i][j] = 'N';
+    				}
+    			} else{
+    				for(var j = 0; j < regularArr[i].length; j++){
+    					if(Math.floor(j/7)%3 == 0) regularArr[i][j] = 'N';
+    					else if(Math.floor(j/7)%3 == 1) regularArr[i][j] = 'D';
+    					else regularArr[i][j] = 'E';
+    				}
+    			}
+    		}
+    		<!-- 간호 조무사 -->
+    		for(var i=0; i < helperArr.length; i++){
+    			if(i%3 == 0){
+    				for(var j = 0; j < helperArr[i].length; j++){
+    					if(Math.floor(j/7)%3 == 0) helperArr[i][j] = 'E';
+    					else if(Math.floor(j/7)%3 == 1) helperArr[i][j] = 'N';
+    					else helperArr[i][j] = 'D';
+    				}
+    			} else if(i%3 == 1){
+    				for(var j = 0; j < helperArr[i].length; j++){
+    					if(Math.floor(j/7)%3 == 0) helperArr[i][j] = 'D';
+    					else if(Math.floor(j/7)%3 == 1) helperArr[i][j] = 'E';
+    					else helperArr[i][j] = 'N';
+    				}
+    			} else{
+    				for(var j = 0; j < helperArr[i].length; j++){
+    					if(Math.floor(j/7)%3 == 0) helperArr[i][j] = 'N';
+    					else if(Math.floor(j/7)%3 == 1) helperArr[i][j] = 'D';
+    					else helperArr[i][j] = 'E';
+    				}
+    			}
+    		}
     		
     		<!-- 간호사열 생성 -->
-    		var nurseR = '';
-    		for(var i = 0; i < chiefN; i++){
-    			nurseR += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td>';
-    			for(var j = 0; j < chiefArr[i].length; j++){
-    				nurseR += '<td style="text-align:center;">'+chiefArr[i][j]+'</td>';
-    			}
-    			nurseR += '</tr>';
-    		}
-    		for(var i = 0; i < regularN; i++){
-    			nurseR += '<tr><td><font color="purple"><strong>일반 간호사'+(i+1)+'</strong></font></td></tr>';
-    		}
-    		for(var i = 0; i < helperN; i++){
-    			nurseR += '<tr><td><font color="brown"><strong>간호 조무사'+(i+1)+'</strong></font></td></tr>';
+    		function nurseRow(index, endDate){
+    			var nurseR = '';
+        		for(var i = 0; i < chiefN; i++){
+        			nurseR += '<tr><td><font color="green"><strong>수간호사'+(i+1)+'</strong></font></td>';
+        			for(var j = index; j < endDate+index; j++){
+        				nurseR += '<td style="text-align:center;">'+chiefArr[i][j]+'</td>';
+        			}
+        			nurseR += '</tr>';
+        		}
+        		for(var i = 0; i < regularN; i++){
+        			nurseR += '<tr><td><font color="green"><strong>일반 간호사'+(i+1)+'</strong></font></td>';
+        			for(var j = index; j < endDate+index; j++){
+        				nurseR += '<td style="text-align:center;">'+regularArr[i][j]+'</td>';
+        			}
+        			nurseR += '</tr>';
+        		}
+        		for(var i = 0; i < helperN; i++){
+        			nurseR += '<tr><td><font color="green"><strong>간호 조무사'+(i+1)+'</strong></font></td>';
+        			for(var j = index; j < endDate+index; j++){
+        				nurseR += '<td style="text-align:center;">'+helperArr[i][j]+'</td>';
+        			}
+        			nurseR += '</tr>';
+        		}
+    			return nurseR;
     		}
     		
     		<!-- 테이블 생성 -->
     		var table='';
+    		var index=0;
     		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
+    			var nurseR = nurseRow(index, endDate(i+1));
     			table += '<table><tr><th>간호사/날짜</th>';
     			for(var j = 1; j <= endDate(i+1); j++){
     				table += '<th>'+(i+1)+'/'+j+'</th>';
+    				index++;
     			}
     			table += '</tr>' + nurseR + '</table><br/><br/>';
     		}
