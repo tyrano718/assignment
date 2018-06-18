@@ -62,50 +62,31 @@
     				chiefArr[i][j] = 'D';
     			}
     		}
-    		<!-- 일반 간호사 -->
-    		for(var i=0; i < regularArr.length; i++){
-    			if(i%3 == 0){
-    				for(var j = 0; j < regularArr[i].length; j++){
-    					if(Math.floor(j/7)%3 == 0) regularArr[i][j] = 'E';
-    					else if(Math.floor(j/7)%3 == 1) regularArr[i][j] = 'N';
-    					else regularArr[i][j] = 'D';
-    				}
-    			} else if(i%3 == 1){
-    				for(var j = 0; j < regularArr[i].length; j++){
-    					if(Math.floor(j/7)%3 == 0) regularArr[i][j] = 'D';
-    					else if(Math.floor(j/7)%3 == 1) regularArr[i][j] = 'E';
-    					else regularArr[i][j] = 'N';
-    				}
-    			} else{
-    				for(var j = 0; j < regularArr[i].length; j++){
-    					if(Math.floor(j/7)%3 == 0) regularArr[i][j] = 'N';
-    					else if(Math.floor(j/7)%3 == 1) regularArr[i][j] = 'D';
-    					else regularArr[i][j] = 'E';
-    				}
-    			}
-    		}
-    		<!-- 간호 조무사 -->
-    		for(var i=0; i < helperArr.length; i++){
-    			if(i%3 == 0){
-    				for(var j = 0; j < helperArr[i].length; j++){
-    					if(Math.floor(j/7)%3 == 0) helperArr[i][j] = 'E';
-    					else if(Math.floor(j/7)%3 == 1) helperArr[i][j] = 'N';
-    					else helperArr[i][j] = 'D';
-    				}
-    			} else if(i%3 == 1){
-    				for(var j = 0; j < helperArr[i].length; j++){
-    					if(Math.floor(j/7)%3 == 0) helperArr[i][j] = 'D';
-    					else if(Math.floor(j/7)%3 == 1) helperArr[i][j] = 'E';
-    					else helperArr[i][j] = 'N';
-    				}
-    			} else{
-    				for(var j = 0; j < helperArr[i].length; j++){
-    					if(Math.floor(j/7)%3 == 0) helperArr[i][j] = 'N';
-    					else if(Math.floor(j/7)%3 == 1) helperArr[i][j] = 'D';
-    					else helperArr[i][j] = 'E';
-    				}
-    			}
-    		}
+    		<!-- 일반 간호사와 간호 조무사-->
+    		<!-- 교대함수 -->
+			function shift(arr, a, b, c){
+				for(var j = 0; j < arr.length; j++){
+					if(Math.floor(j/7)%3 == 0) arr[j] = a;
+					else if(Math.floor(j/7)%3 == 1) arr[j] = b;
+					else arr[j] = c;
+				}
+			}
+			<!-- 근무 배정 및 교대 함수 -->
+			function assign(arr){
+				for(var i=0; i < arr.length; i++){
+	    			if(i%3 == 0){
+	    				shift(arr[i], 'E', 'N', 'D');
+	    			} else if(i%3 == 1){
+	    				shift(arr[i], 'D', 'E', 'N');
+	    			} else{
+	    				shift(arr[i], 'N', 'D', 'E');
+	    			}
+	    		}
+			}
+			<!-- 일반간호사 -->
+			assign(regularArr);
+			<!-- 간호조무사 -->
+			assign(helperArr);
     		
     		<!-- 간호사열 생성 -->
     		function nurseRow(index, endDate){
