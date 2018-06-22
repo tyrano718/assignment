@@ -147,14 +147,23 @@
     		}
     		
     		<!-- 테이블 생성 -->
+    		function redDate(i, j){
+    			var day = new Date(2018, i, j).getDay();
+    			if(day == 0 || day == 6) return true;
+    		}
+    		
     		var table='';
     		var index=0;
     		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
     			var nurseR = nurseRow(index, endDate(i+1));
     			table += '<table><tr><th>간호사/날짜</th>';
     			for(var j = 1; j <= endDate(i+1); j++){
-    				table += '<th>'+(i+1)+'/'+j+'</th>';
-    				index++;
+    				if(redDate(i, j))
+    					table += '<th><font color="red">'+(i+1)+'/'+j+'</th>';
+    				else{
+    					table += '<th>'+(i+1)+'/'+j+'</th>';
+    					index++;
+    				}
     			}
     			table += '</tr>' + nurseR + '</table><br/><br/>';
     		}
