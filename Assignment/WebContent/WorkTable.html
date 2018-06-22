@@ -99,6 +99,25 @@
 			assign(regularArr);
 			<!-- 간호조무사 -->
 			assign(helperArr);
+			
+			<!-- 간호사 휴가 배정(주말) -->
+			<!-- 수간호사 -->
+			function cRest(cnt, j){
+				var r = cnt%chiefArr.length;
+				for(var i=0; i<chiefArr.length; i++){
+					if(i == r) continue;
+					chiefArr[i][j] = '';
+				}
+			}
+			
+			var cnt = 0;
+			
+			for(var j=0; j<dateArr.length; j++){
+				var day = dateArr[j].getDay();
+				if(day == 0 || day == 6){
+					cRest(cnt++, j);
+				}
+			}
     		
     		<!-- 간호사열 생성 -->
     		function nurseRow(index, endDate){
