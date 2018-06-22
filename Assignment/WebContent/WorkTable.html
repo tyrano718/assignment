@@ -50,14 +50,18 @@
     		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
     			endDateSum += endDate(i+1);
     		}
-    		<!-- 근무기간 날짜 정보 저장된 배열 생성
+    		<!-- 간호사의 근무기간 날짜 정보 저장된 배열 생성 -->
     		var dateArr = new Array(endDateSum);
-    		var d=1;
-    		var temp = monthS.getMonth();
+    		var m = monthS.getMonth();
+    		var d = 1;
     		for(var i=0; i<dateArr.length; i++){
-    			dateArr[i] = new Date(2018, monthS.getMonth(), d++);
+    			if(d > endDate(m+1)) {
+    				m++;
+    				d = 1;
+    			}
+    			dateArr[i] = new Date(2018, m, d++);
     		}
-    		-->
+    		
     		
     		for(var i = 0; i < chiefArr.length; i++) chiefArr[i] = new Array(endDateSum);
     		for(var i = 0; i < regularArr.length; i++) regularArr[i] = new Array(endDateSum);
