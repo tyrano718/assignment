@@ -308,6 +308,27 @@
     			}
     			table += '</tr>' + nurseR + '</table><br/><br/>';
     		}
+    		for(var i=0; i<chiefArr.length; i++){
+    			var n = 0;
+    			for(var j=0; j<dateArr.length; j++){
+    				if(chiefArr[i][j] == '') n++;
+    			}
+    			table += '<p>수간호사'+(i+1)+'('+(cBirthArr[i].getMonth()+1)+'/'+cBirthArr[i].getDate()+') (이)가 쉰 날: '+n+'일</p>';
+    		}
+    		for(var i=0; i<regularArr.length; i++){
+    			var n = 0;
+    			for(var j=0; j<dateArr.length; j++){
+    				if(regularArr[i][j] == '') n++;
+    			}
+    			table += '<p>일반 간호사'+(i+1)+'('+(rBirthArr[i].getMonth()+1)+'/'+rBirthArr[i].getDate()+') (이)가 쉰 날: '+n+'일</p>';
+    		}
+    		for(var i=0; i<helperArr.length; i++){
+    			var n = 0;
+    			for(var j=0; j<dateArr.length; j++){
+    				if(helperArr[i][j] == '') n++;
+    			}
+    			table += '<p>간호 조무사'+(i+1)+'('+(hBirthArr[i].getMonth()+1)+'/'+hBirthArr[i].getDate()+') (이)가 쉰 날: '+n+'일</p>';
+    		}
     		
     		$("#table").html(table);
     		$("#confirm").hide();
