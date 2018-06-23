@@ -45,6 +45,37 @@
     		var chiefArr = new Array(chiefN);
     		var regularArr = new Array(regularN);
     		var helperArr = new Array(helperN);
+    		<!-- 간호사 생일 배열 생성 및 생일 랜덤 배정(단, 중복 없음) -->
+    		var cBirthArr = new Array(chiefN);
+    		var rBirthArr = new Array(regularN);
+    		var hBirthArr = new Array(helperN);
+    		
+    		function dup(birthDay, i, birthArr){
+    			for(var j=0; j<i; j++){
+    				if(birthArr[j] == birthDay) return true;
+    			}
+    			return false;
+    		}
+    		
+    		function birthGen(birthArr){
+    			for(var i=0; i<birthArr.length; i++){
+        			var month = Math.floor(Math.random()*12);
+        			var date = Math.floor(Math.random()*endDate(month+1)+1);
+        			var birthDay = new Date(2018, month, date);
+        			
+        			while(dup(birthDay, i, birthArr)){
+        				month = Math.floor(Math.random()*12);
+        				date = Math.floor(Math.random()*endDate(month+1)+1);
+        				birthDay = new Date(2018, month, date);
+        			}
+        			birthArr[i] = birthDay;
+        		}
+    		}
+    		
+    		birthGen(cBirthArr);
+    		birthGen(rBirthArr);
+    		birthGen(hBirthArr);
+    		
     		<!-- 간호사의 근무기간 구하기 -->
     		var endDateSum = 0;
     		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
@@ -52,6 +83,7 @@
     		}
     		<!-- 간호사의 근무기간 날짜 정보 저장된 배열 생성 -->
     		var dateArr = new Array(endDateSum);
+    		var restDays = new Array();
     		var m = monthS.getMonth();
     		var d = 1;
     		for(var i=0; i<dateArr.length; i++){
@@ -60,6 +92,8 @@
     				d = 1;
     			}
     			dateArr[i] = new Date(2018, m, d++);
+    			var day = dateArr[i].getDay();
+    			if(day == 0 || day == 6) restDays.push(i);
     		}
     		
     		
@@ -76,23 +110,41 @@
     		}
     		<!-- 일반 간호사와 간호 조무사-->
     		<!-- 교대함수 -->
-			function shift(arr, a, b, c){
+			function shift1(arr, a, b, c){
 				for(var j = 0; j < arr.length; j++){
 					if(Math.floor(j/7)%3 == 0) arr[j] = a;
 					else if(Math.floor(j/7)%3 == 1) arr[j] = b;
 					else arr[j] = c;
 				}
 			}
+			function shift2(arr, a, b, c){
+				for(var j = 0; j < arr.length; j++){
+					if(Math.floor((j+4)/7)%3 == 0) arr[j] = a;
+					else if(Math.floor((j+4)/7)%3 == 1) arr[j] = b;
+					else arr[j] = c;
+				}
+			}
 			<!-- 근무 배정 및 교대 함수 -->
 			function assign(arr){
+				var n = arr.length;
+				var x = Math.floor(n/3) * 3 - 1;
+				
 				for(var i=0; i < arr.length; i++){
-	    			if(i%3 == 0){
-	    				shift(arr[i], 'E', 'N', 'D');
-	    			} else if(i%3 == 1){
-	    				shift(arr[i], 'D', 'E', 'N');
-	    			} else{
-	    				shift(arr[i], 'N', 'D', 'E');
-	    			}
+					if(i <= x){
+		    			if(i%3 == 0){
+		    				shift1(arr[i], 'E', 'N', 'D');
+		    			} else if(i%3 == 1){
+		    				shift1(arr[i], 'D', 'E', 'N');
+		    			} else{
+		    				shift1(arr[i], 'N', 'D', 'E');
+		    			}
+					} else {
+						if(i-x == 1){
+							shift2(arr[i], 'E', 'N', 'D');
+						}else{
+							shift2(arr[i], 'D', 'E', 'N');
+						}
+					}
 	    		}
 			}
 			<!-- 일반간호사 -->
@@ -100,24 +152,32 @@
 			<!-- 간호조무사 -->
 			assign(helperArr);
 			
-			<!-- 간호사 휴가 배정(주말) -->
+			<!-- 간호사 휴일 배정(주말) -->
 			<!-- 수간호사 -->
-			function cRest(cnt, j){
-				var r = cnt%chiefArr.length;
-				for(var i=0; i<chiefArr.length; i++){
-					if(i == r) continue;
-					chiefArr[i][j] = '';
+			var cAlter = false;
+			
+			for(var i=0; i<restDays.length; i++){
+				<!-- i번째 휴일에 일하는 x번 간호사 -->
+				var x = i % chiefN;
+				var j = restDays[i];
+				var restDate = dateArr[j];
+				var isBirthDay = (restDate[i] == cBirthArr[x]);
+				
+				if(isBirthDay){
+					x++;
+					if(x == chiefArr.length) x = 0;
+					cAlter = true;
+				} else if(cAlter){
+					x--;
+					if(x == -1) x = chiefArr.length-1;
+					cAlter = false;
+				}
+				for(var k=0; k<chiefN; k++){
+					if(k != x) chiefArr[k][j] = '';
 				}
 			}
+			<!-- 일반 간호사/간호 조무사 -->
 			
-			var cnt = 0;
-			
-			for(var j=0; j<dateArr.length; j++){
-				var day = dateArr[j].getDay();
-				if(day == 0 || day == 6){
-					cRest(cnt++, j);
-				}
-			}
     		
     		<!-- 간호사열 생성 -->
     		function nurseRow(index, endDate){
@@ -156,13 +216,13 @@
     		var index=0;
     		for(var i = monthS.getMonth(); i <= monthE.getMonth(); i++){
     			var nurseR = nurseRow(index, endDate(i+1));
+    			index += endDate(i+1);
     			table += '<table><tr><th>간호사/날짜</th>';
     			for(var j = 1; j <= endDate(i+1); j++){
     				if(redDate(i, j))
     					table += '<th><font color="red">'+(i+1)+'/'+j+'</th>';
     				else{
     					table += '<th>'+(i+1)+'/'+j+'</th>';
-    					index++;
     				}
     			}
     			table += '</tr>' + nurseR + '</table><br/><br/>';
