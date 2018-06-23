@@ -161,7 +161,7 @@
 				var x = i % chiefN;
 				var j = restDays[i];
 				var restDate = dateArr[j];
-				var isBirthDay = (restDate[i] == cBirthArr[x]);
+				var isBirthDay = restDate.getMonth() == cBirthArr[x].getMonth() && restDate.getDate() == cBirthArr[x].getDate();
 				
 				if(isBirthDay){
 					x++;
@@ -221,9 +221,9 @@
 					align(d, restCounts);
 					align(n, restCounts);
 					
-					var eIsBirthDay = dateArr[j] == birthArr[e[0]];
-					var dIsBirthDay = dateArr[j] == birthArr[d[0]];
-					var nIsBirthDay = dateArr[j] == birthArr[n[0]];
+					var eIsBirthDay = dateArr[j].getMonth() == birthArr[e[0]].getMonth() && dateArr[j].getDate() == birthArr[e[0]].getDate();
+					var dIsBirthDay = dateArr[j].getMonth() == birthArr[d[0]].getMonth() && dateArr[j].getDate() == birthArr[d[0]].getDate();
+					var nIsBirthDay = dateArr[j].getMonth() == birthArr[n[0]].getMonth() && dateArr[j].getDate() == birthArr[n[0]].getDate();
 					
 					if(eIsBirthDay) e[0] = e[1];
 					if(dIsBirthDay) d[0] = d[1];
@@ -246,15 +246,15 @@
     			var day = dateArr[j].getDay();
     			if(day > 0 && day < 6){
     				for(var i=0; i<chiefArr.length; i++){
-    					if(dateArr[j] == cBirthArr[i])
+    					if(dateArr[j].getMonth() == cBirthArr[i].getMonth() && dateArr[j].getDate() == cBirthArr[i].getDate())
     						chiefArr[i][j] = '';
     				}
     				for(var i=0; i<regularArr.length; i++){
-    					if(dateArr[j] == rBirthArr[i])
+    					if(dateArr[j].getMonth() == rBirthArr[i].getMonth() && dateArr[j].getDate() == rBirthArr[i].getDate())
     						regularArr[i][j] = '';
     				}
     				for(var i=0; i<helperArr.length; i++){
-    					if(dateArr[j] == hBirthArr[i])
+    					if(dateArr[j].getMonth() == hBirthArr[i].getMonth() && dateArr[j].getDate() == hBirthArr[i].getDate())
     						helperArr[i][j] = '';
     				}
     			}
