@@ -177,8 +177,61 @@
 				}
 			}
 			<!-- 일반 간호사/간호 조무사 -->
+			var rRestCounts = new Array(regularN);
+			var hRestCounts = new Array(helperN);
 			
-    		
+			for(var i=0; i<rRestCounts.length; i++){
+				rRestCounts[i] = 0;
+			}
+			for(var i=0; i<hRestCounts.length; i++){
+				hRestCounts[i] = 0;
+			}
+			<!-- 간호사의 인덱스를 조별로 다른 배열에 넣는 함수 -->
+			function group(nurseArr, j, e, d, n){
+				for(var i=0; i<nurseArr.length; i++){
+					if(nurseArr[i][j] == 'E') e.push(i);
+					else if(nurseArr[i][j] == 'D') d.push(i);
+					else n.push(i);
+				}
+			}
+			<!-- 각 조의 간호사 인덱스를 쉰 날이 많은 순으로 내림차순 정렬하는 함수 -->
+			function align(arr, restCounts){
+				for(var i=0; i<arr.length-1; i++){
+					for(var j=i+1; j<arr.length; j++){
+						if(restCounts[arr[i]] < restCounts[arr[j]]){
+							var temp = arr[i];
+							arr[i] = arr[j];
+							arr[j] = temp;
+						}
+					}
+				}
+			}
+			<!-- 간호사에게 휴일을 부여하는 함수 -->
+			function off(nurseArr, restCounts){
+				for(var i=0; i<restDays.length; i++){
+					var j = restDays[i];
+					
+					var e = new Array();
+					var d = new Array();
+					var n = new Array();
+					
+					group(nurseArr, j, e, d, n);
+					
+					align(e, restCounts);
+					align(d, restCounts);
+					align(n, restCounts);
+					
+					for(var k=0; k<nurseArr.length; k++){
+						if(k != e[0] && k != d[0] && k != n[0]){
+							nurseArr[k][j] = '';
+							restCounts[k]++;
+						}
+					}
+				}
+			}
+			
+    		off(regularArr, rRestCounts);
+    		off(helperArr, hRestCounts);
     		<!-- 간호사열 생성 -->
     		function nurseRow(index, endDate){
     			var nurseR = '';
