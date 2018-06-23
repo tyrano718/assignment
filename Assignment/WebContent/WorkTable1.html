@@ -207,7 +207,7 @@
 				}
 			}
 			<!-- 간호사에게 휴일을 부여하는 함수 -->
-			function off(nurseArr, restCounts){
+			function off(nurseArr, restCounts, birthArr){
 				for(var i=0; i<restDays.length; i++){
 					var j = restDays[i];
 					
@@ -221,6 +221,14 @@
 					align(d, restCounts);
 					align(n, restCounts);
 					
+					var eIsBirthDay = dateArr[j] == birthArr[e[0]];
+					var dIsBirthDay = dateArr[j] == birthArr[d[0]];
+					var nIsBirthDay = dateArr[j] == birthArr[n[0]];
+					
+					if(eIsBirthDay) e[0] = e[1];
+					if(dIsBirthDay) d[0] = d[1];
+					if(nIsBirthDay) n[0] = n[1];
+					
 					for(var k=0; k<nurseArr.length; k++){
 						if(k != e[0] && k != d[0] && k != n[0]){
 							nurseArr[k][j] = '';
@@ -230,8 +238,28 @@
 				}
 			}
 			
-    		off(regularArr, rRestCounts);
-    		off(helperArr, hRestCounts);
+    		off(regularArr, rRestCounts, rBirthArr);
+    		off(helperArr, hRestCounts, hBirthArr);
+    		
+    		<!-- 평일에 생일인 간호사 휴가부여 -->
+    		for(var j=0; j<dateArr.length; j++){
+    			var day = dateArr[j].getDay();
+    			if(day > 0 && day < 6){
+    				for(var i=0; i<chiefArr.length; i++){
+    					if(dateArr[j] == cBirthArr[i])
+    						chiefArr[i][j] = '';
+    				}
+    				for(var i=0; i<regularArr.length; i++){
+    					if(dateArr[j] == rBirthArr[i])
+    						regularArr[i][j] = '';
+    				}
+    				for(var i=0; i<helperArr.length; i++){
+    					if(dateArr[j] == hBirthArr[i])
+    						helperArr[i][j] = '';
+    				}
+    			}
+    		}
+    		
     		<!-- 간호사열 생성 -->
     		function nurseRow(index, endDate){
     			var nurseR = '';
